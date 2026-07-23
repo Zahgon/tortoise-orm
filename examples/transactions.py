@@ -1,6 +1,3 @@
-"""
-This example demonstrates how you can use transactions with tortoise
-"""
 
 from tortoise import Tortoise, fields, run_async
 from tortoise.exceptions import OperationalError

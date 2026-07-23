@@ -1,6 +1,3 @@
-"""
-This example demonstrates pydantic serialisation of a recursively cycled model.
-"""
 
 from tortoise import Tortoise, fields, run_async
 from tortoise.contrib.pydantic import pydantic_model_creator
@@ -22,31 +19,12 @@ class Employee(Model):
     gets_talked_to: fields.ManyToManyRelation["Employee"]
 
     def name_length(self) -> int:
-        # Computes length of name
-        # Note that this function needs to be annotated with a return type so that pydantic
-        # can generate a valid schema
-        return len(self.name)
+        pass
 
     def team_size(self) -> int:
-        """
-        Computes team size.
-
-        Note that this function needs to be annotated with a return type so that pydantic can
-         generate a valid schema.
-
-        Note that the pydantic serializer can't call async methods, but the tortoise helpers
-         pre-fetch relational data, so that it is available before serialization. So we don't
-         need to await the relation. We do however have to protect against the case where no
-         prefetching was done, hence catching and handling the
-         ``tortoise.exceptions.NoValuesFetched`` exception.
-        """
-        try:
-            return len(self.team_members)
-        except NoValuesFetched:
-            return -1
+        pass
 
     def not_annotated(self):
-        # Never called due to no annotation!
         raise NotImplementedError("Not Done")
 
     class PydanticMeta:
@@ -61,7 +39,6 @@ async def run():
     await Tortoise.generate_schemas()
 
     Employee_Pydantic = pydantic_model_creator(Employee)
-    # print(Employee_Pydantic.schema_json(indent=4))
 
     root = await Employee.create(name="Root")
     loose = await Employee.create(name="Loose")

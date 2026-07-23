@@ -1,5 +1,3 @@
-# mypy: no-disallow-untyped-decorators
-# pylint: disable=E0611,E0401
 import multiprocessing
 from collections.abc import AsyncGenerator
 from concurrent.futures import ProcessPoolExecutor
@@ -35,98 +33,50 @@ ClientManagerType = AsyncGenerator[AsyncClient, None]
 
 @pytest.fixture(scope="module")
 def anyio_backend() -> str:
-    return "asyncio"
+    pass
 
 
 @asynccontextmanager
 async def client_manager(app, base_url="http://test", **kw) -> ClientManagerType:
-    async with LifespanManager(app):
-        transport = ASGITransport(app=app)
-        async with AsyncClient(transport=transport, base_url=base_url, **kw) as c:
-            yield c
+    pass
 
 
 @pytest.fixture(scope="module")
 async def client() -> ClientManagerType:
-    async with client_manager(app) as c:
-        await truncate_all_models()
-        yield c
+    pass
 
 
 @pytest.fixture(scope="module")
 async def client_east() -> ClientManagerType:
-    # app_east uses _enable_global_fallback=False, so we need to explicitly
-    # enter the context from app.state to make it current for tests
-    async with client_manager(app_east) as c:
-        ctx = app_east.state._tortoise_context
-        with ctx:  # Enter context to make it current via contextvar
-            await truncate_all_models()
-            yield c
+    pass
 
 
 class UserTester:
     async def create_user(self, async_client: AsyncClient) -> Users:
-        response = await async_client.post("/users", json={"username": "admin"})
-        assert response.status_code == 200, response.text
-        data = response.json()
-        assert data["username"] == "admin"
-        assert "id" in data
-        user_id = data["id"]
-
-        user_obj = await Users.get(id=user_id)
-        assert user_obj.id == user_id
-        return user_obj
+        pass
 
     async def user_list(self, async_client: AsyncClient) -> tuple[datetime, Users, User_Pydantic]:
-        utc_now = datetime.now(UTC)
-        user_obj = await Users.create(username="test")
-        response = await async_client.get("/users")
-        assert response.status_code == 200, response.text
-        data = response.json()
-        assert isinstance(data, list)
-        item = await User_Pydantic.from_tortoise_orm(user_obj)
-        item_dict = JSON_LOADS(item.model_dump_json())
-        api_item = next((x for x in data if x["id"] == user_obj.id), None)
-        assert api_item is not None, f"User {user_obj.id} not found in response"
-        for key, value in item_dict.items():
-            assert key in api_item, f"Key {key!r} missing from API response"
-            if key in ("created_at", "modified_at"):
-                # Compare as datetime objects to handle timezone format differences
-                # (Pydantic normalizes to UTC, FastAPI preserves original timezone)
-                # Replace trailing 'Z' with '+00:00' for fromisoformat() compatibility
-                a = datetime.fromisoformat(api_item[key].replace("Z", "+00:00"))
-                b = datetime.fromisoformat(value.replace("Z", "+00:00"))
-                assert a == b, f"Datetime mismatch on {key!r}: {api_item[key]} != {value}"
-            else:
-                assert api_item[key] == value, f"Mismatch on {key!r}"
-        return utc_now, user_obj, item
+        pass
 
 
 class TestUser(UserTester):
     @pytest.mark.anyio
     async def test_create_user(self, client: AsyncClient) -> None:  # nosec
-        await self.create_user(client)
+        pass
 
     @pytest.mark.anyio
     async def test_user_list(self, client: AsyncClient) -> None:  # nosec
-        await self.user_list(client)
+        pass
 
 
 @pytest.mark.anyio
 async def test_404(client: AsyncClient) -> None:
-    response = await client.get("/404")
-    assert response.status_code == 404, response.text
-    data = response.json()
-    assert isinstance(data["detail"], str)
+    pass
 
 
 @pytest.mark.anyio
 async def test_422(client: AsyncClient) -> None:
-    response = await client.get("/422")
-    assert response.status_code == 422, response.text
-    data = response.json()
-    assert isinstance(data["detail"], list)
-    assert isinstance(data["detail"][0], dict)
+    pass
 
 
 class TestUserEast(UserTester):
@@ -135,52 +85,26 @@ class TestUserEast(UserTester):
 
     @pytest.mark.anyio
     async def test_create_user_east(self, client_east: AsyncClient) -> None:  # nosec
-        user_obj = await self.create_user(client_east)
-        created_at = user_obj.created_at
-
-        # Verify time zone
-        asia_now = localtime(timezone=self.timezone)
-        assert created_at.hour - asia_now.hour == 0
-
-        # UTC timezone
-        utc_now = localtime(timezone="UTC")
-        assert (created_at.hour - utc_now.hour) in [self.delta_hours, self.delta_hours - 24]
+        pass
 
     @pytest.mark.anyio
     async def test_user_list(self, client_east: AsyncClient) -> None:  # nosec
-        time, user_obj, item = await self.user_list(client_east)
-        created_at = user_obj.created_at
-        assert (created_at.hour - time.hour) in [self.delta_hours, self.delta_hours - 24]
-        assert item.model_dump()["created_at"].hour == created_at.hour
+        pass
 
 
 @pytest.mark.anyio
 async def test_404_east(client_east: AsyncClient) -> None:
-    response = await client_east.get("/404")
-    assert response.status_code == 404, response.text
-    data = response.json()
-    assert isinstance(data["detail"], str)
+    pass
 
 
 @pytest.mark.anyio
 async def test_422_east(client_east: AsyncClient) -> None:
-    response = await client_east.get("/422")
-    assert response.status_code == 422, response.text
-    data = response.json()
-    assert isinstance(data["detail"], list)
-    assert isinstance(data["detail"][0], dict)
+    pass
 
 
 def query_without_app(pk: int) -> int:
-    async def runner() -> bool:
-        async with register_orm():
-            return await Users.filter(id__gt=pk).count()
-
-    return anyio.run(runner)
+    pass
 
 
 def test_query_without_app():
-    multiprocessing.set_start_method("spawn")
-    with ProcessPoolExecutor(max_workers=1) as executor:
-        future = executor.submit(query_without_app, 0)
-        assert future.result() >= 0
+    pass

@@ -1,4 +1,3 @@
-# pylint: disable=E0611,E0401
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
@@ -9,17 +8,7 @@ from routers import router as users_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    async with register_orm(
-        app,
-        use_tz=True,
-        timezone="Asia/Shanghai",
-        add_exception_handlers=True,
-        _enable_global_fallback=False,
-    ):
-        # db connected
-        yield
-        # app teardown
-    # db connections closed
+    pass
 
 
 app = FastAPI(title="Tortoise ORM FastAPI example", lifespan=lifespan)

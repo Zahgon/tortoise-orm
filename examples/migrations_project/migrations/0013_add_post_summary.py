@@ -4,13 +4,11 @@ from tortoise.migrations import operations as ops
 
 
 async def populate_post_summary(apps, schema_editor) -> None:
-    Post = apps.get_model("blog.Post")
-    await Post.filter(summary=None).update(summary=F("title"))
+    pass
 
 
 async def reset_post_summary(apps, schema_editor) -> None:
-    Post = apps.get_model("blog.Post")
-    await Post.all().update(summary=None)
+    pass
 
 
 class Migration(migrations.Migration):

@@ -1,6 +1,3 @@
-"""
-This example demonstrates pydantic serialisation, and how to use early partial init.
-"""
 
 from tortoise import Tortoise, fields
 from tortoise.contrib.pydantic import pydantic_model_creator
@@ -41,4 +38,3 @@ Event_Pydantic = pydantic_model_creator(Event)
 print("\nRelations are now present:")
 print(Event_Pydantic.schema_json(indent=4))
 
-# Now we can use the pydantic model early if needed

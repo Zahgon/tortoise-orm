@@ -1,4 +1,3 @@
-# pylint: disable=E0401,E0611
 import logging
 
 from models import Users
@@ -13,14 +12,12 @@ app = Sanic(__name__)
 
 @app.route("/")
 async def list_all(request):
-    users = await Users.all()
-    return response.json({"users": [str(user) for user in users]})
+    pass
 
 
 @app.post("/user")
 async def add_user(request):
-    user = await Users.create(name="New User")
-    return response.json({"user": str(user)})
+    pass
 
 
 register_tortoise(

@@ -1,21 +1,8 @@
-"""
-Multi-schema example: models spread across PostgreSQL schemas.
-
-- ``catalog`` schema: Product and Category (the product catalog)
-- ``warehouse`` schema: Supplier and Inventory (stock management)
-
-Cross-schema references:
-  - Product -> Category (FK within ``catalog``)
-  - Inventory -> Product (FK from ``warehouse`` to ``catalog``)
-  - Inventory -> Supplier (FK within ``warehouse``)
-  - Product <-> Supplier (M2M between ``catalog`` and ``warehouse``)
-"""
 
 from __future__ import annotations
 
 from tortoise import fields, models
 
-# ── catalog schema ──────────────────────────────────────────────
 
 
 class Category(models.Model):
@@ -40,7 +27,6 @@ class Product(models.Model):
         "shop.Category", related_name="products"
     )
 
-    # M2M across schemas: catalog.product <-> warehouse.supplier
     suppliers: fields.ManyToManyRelation[Supplier] = fields.ManyToManyField(
         "shop.Supplier",
         related_name="products",
@@ -55,7 +41,6 @@ class Product(models.Model):
         return f"{self.name} ({self.sku})"
 
 
-# ── warehouse schema ────────────────────────────────────────────
 
 
 class Supplier(models.Model):
@@ -75,12 +60,10 @@ class Inventory(models.Model):
     id = fields.IntField(pk=True)
     quantity = fields.IntField(default=0)
 
-    # FK from warehouse -> catalog
     product: fields.ForeignKeyRelation[Product] = fields.ForeignKeyField(
         "shop.Product", related_name="stock_entries"
     )
 
-    # FK within warehouse
     supplier: fields.ForeignKeyRelation[Supplier] = fields.ForeignKeyField(
         "shop.Supplier", related_name="stock_entries"
     )

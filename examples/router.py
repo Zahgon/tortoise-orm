@@ -1,6 +1,3 @@
-"""
-This example to use router to implement read/write separation
-"""
 
 from tortoise import Model, Tortoise, fields, run_async
 
@@ -40,9 +37,7 @@ async def run():
     }
     await Tortoise.init(config=config)
     await Tortoise.generate_schemas()
-    # this will use connection master
     event = await Event.create(name="Test")
-    # this will use connection slave
     await Event.get(pk=event.pk)
 
 

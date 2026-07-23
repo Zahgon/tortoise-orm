@@ -1,4 +1,3 @@
-# pylint: disable=E0611,E0401
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
@@ -11,11 +10,7 @@ from tortoise.contrib.fastapi import tortoise_exception_handlers
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    async with register_orm(app):
-        # db connected
-        yield
-        # app teardown
-    # db connections closed
+    pass
 
 
 app = FastAPI(

@@ -1,7 +1,3 @@
-"""
-Showcase PostgreSQL full text search helpers.
-Requires PostgreSQL 12+ for generated TSVECTOR columns.
-"""
 
 from tortoise import Tortoise, fields, run_async
 from tortoise.contrib.postgres.fields import TSVectorField

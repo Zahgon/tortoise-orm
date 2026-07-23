@@ -1,6 +1,3 @@
-"""
-This example demonstrates pydantic serialisation
-"""
 
 from tortoise import Tortoise, fields, run_async
 from tortoise.contrib.pydantic import pydantic_model_creator, pydantic_queryset_creator
@@ -66,10 +63,6 @@ async def run():
     Tournament_Pydantic = pydantic_model_creator(Tournament)
     Team_Pydantic = pydantic_model_creator(Team)
 
-    # print(Event_Pydantic_List.schema_json(indent=4))
-    # print(Event_Pydantic.schema_json(indent=4))
-    # print(Tournament_Pydantic.schema_json(indent=4))
-    # print(Team_Pydantic.schema_json(indent=4))
 
     tournament = await Tournament.create(name="New Tournament")
     tournament2 = await Tournament.create(name="Old Tournament")

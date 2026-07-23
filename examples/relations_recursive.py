@@ -1,13 +1,3 @@
-"""
-This example shows how self-referential (recursive) relations work.
-
-Key points in this example are:
-* Use of ForeignKeyField that refers to self
-* To pass in the (optional) parent node at creation
-* To use async iterator to fetch children
-* To use .fetch_related(…) to emulate sync behaviour
-* That insert-order gets preserved for ForeignFields, but not ManyToManyFields
-"""
 
 from tortoise import Tortoise, fields, run_async
 from tortoise.models import Model
@@ -85,12 +75,10 @@ async def run():
     await _1.talks_to.add(_2, _1_1_1, loose)
     await _2_1.gets_talked_to.add(_2_2, _1_1, loose)
 
-    # Evaluated off creation objects
     print(await loose.full_hierarchy__fetch_related())
     print(await root.full_hierarchy__async_for())
     print(await root.full_hierarchy__fetch_related())
 
-    # Evaluated off new objects → Result is identical
     root2 = await Employee.get(name="Root")
     loose2 = await Employee.get(name="Loose")
     print(await loose2.full_hierarchy__fetch_related())

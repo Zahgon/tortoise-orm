@@ -1,4 +1,3 @@
-# pylint: disable=E0401,E0611
 import logging
 from json import JSONDecodeError
 
@@ -19,22 +18,12 @@ app = Starlette()
 
 @app.route("/", methods=["GET"])
 async def list_all(_: Request) -> JSONResponse:
-    users = await Users.all()
-    return JSONResponse({"users": [str(user) for user in users]})
+    pass
 
 
 @app.route("/user", methods=["POST"])
 async def add_user(request: Request) -> JSONResponse:
-    try:
-        payload = await request.json()
-        username = payload["username"]
-    except JSONDecodeError:
-        raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="cannot parse request body")
-    except KeyError:
-        raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="username is required")
-
-    user = await Users.create(username=username)
-    return JSONResponse({"user": str(user)}, status_code=HTTP_201_CREATED)
+    pass
 
 
 register_tortoise(

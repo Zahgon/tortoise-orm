@@ -1,4 +1,3 @@
-# pylint: disable=E0401,E0611
 import logging
 
 from aiohttp import web
@@ -10,13 +9,11 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 async def list_all(request):
-    users = await Users.all()
-    return web.json_response({"users": [str(user) for user in users]})
+    pass
 
 
 async def add_user(request):
-    user = await Users.create(name="New User")
-    return web.json_response({"user": str(user)})
+    pass
 
 
 app = web.Application()

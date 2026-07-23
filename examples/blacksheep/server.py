@@ -1,4 +1,3 @@
-# pylint: disable=E0401,E0611
 from __future__ import annotations
 
 from uuid import UUID
@@ -27,28 +26,24 @@ docs.bind_app(app)
 
 @app.router.get("/")
 async def users_list() -> UserPydanticOut:
-    return ok(await UserPydanticOut.from_queryset(Users.all()))
+    pass
 
 
 @app.router.post("/")
 async def users_create(user: UserPydanticIn) -> UserPydanticOut:
-    user = await Users.create(**user.model_dump(exclude_unset=True))
-    return created(await UserPydanticOut.from_tortoise_orm(user))
+    pass
 
 
 @app.router.patch("/{id}")
 async def users_patch(id: UUID, user: UserPydanticIn) -> UserPydanticOut:
-    await Users.filter(id=id).update(**user.model_dump(exclude_unset=True))
-    return ok(await UserPydanticOut.from_tortoise_orm(await Users.get(id=id)))
+    pass
 
 
 @app.router.put("/{id}")
 async def users_put(id: UUID, user: UserPydanticIn) -> UserPydanticOut:
-    await Users.filter(id=id).update(**user.model_dump())
-    return ok(await UserPydanticOut.from_tortoise_orm(await Users.get(id=id)))
+    pass
 
 
 @app.router.delete("/{id}")
 async def users_delete(id: UUID) -> Response:
-    await Users.filter(id=id).delete()
-    return no_content()
+    pass

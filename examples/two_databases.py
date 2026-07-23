@@ -1,13 +1,3 @@
-"""
-This example demonstrates how you can use Tortoise if you have to
-separate databases
-
-Disclaimer: Although it allows to use two databases, you can't
-use relations between two databases
-
-Key notes of this example is using db_route for Tortoise init
-and explicitly declaring model apps in class Meta
-"""
 
 from tortoise import Tortoise, connections, fields, run_async
 from tortoise.exceptions import OperationalError
@@ -29,7 +19,6 @@ class Event(Model):
     id = fields.IntField(primary_key=True)
     name = fields.TextField()
     tournament_id = fields.IntField()
-    # Here we make link to events.Team, not models.Team
     participants: fields.ManyToManyRelation["Team"] = fields.ManyToManyField(
         "events.Team", related_name="events", through="event_team"
     )

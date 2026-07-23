@@ -1,9 +1,3 @@
-"""
-ERP (Enterprise Resource Planning) Models for Comprehensive Migrations Example.
-
-This module demonstrates all Tortoise ORM field types through a realistic ERP scenario.
-Models evolve through multiple migration phases showing Create, Alter, and Drop operations.
-"""
 
 from __future__ import annotations
 
@@ -15,7 +9,6 @@ from tortoise.fields import Now, RandomHex
 
 
 class OrderStatus(IntEnum):
-    """Order processing status - demonstrates IntEnumField."""
 
     PENDING = 1
     PROCESSING = 2
@@ -25,7 +18,6 @@ class OrderStatus(IntEnum):
 
 
 class PaymentMethod(str, Enum):
-    """Payment method types - demonstrates CharEnumField."""
 
     CREDIT_CARD = "credit_card"
     PAYPAL = "paypal"
@@ -34,7 +26,6 @@ class PaymentMethod(str, Enum):
 
 
 class Company(models.Model):
-    """Company entity - represents an organization."""
 
     id = fields.IntField(pk=True)
     name = fields.CharField(max_length=300)
@@ -49,7 +40,6 @@ class Company(models.Model):
 
 
 class Department(models.Model):
-    """Department entity - organizational unit within a company."""
 
     id = fields.IntField(pk=True)
     name = fields.CharField(max_length=150)
@@ -69,7 +59,6 @@ class Department(models.Model):
 
 
 class Employee(models.Model):
-    """Employee entity - person working for the company."""
 
     id = fields.IntField(pk=True)
     first_name = fields.CharField(max_length=100)
@@ -87,7 +76,6 @@ class Employee(models.Model):
 
 
 class Category(models.Model):
-    """Category entity - hierarchical product categorization."""
 
     id = fields.IntField(pk=True)
     name = fields.CharField(max_length=100, unique=True)
@@ -102,7 +90,6 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    """Product entity - items offered by the company."""
 
     id = fields.IntField(pk=True)
     product_code = fields.CharField(max_length=50, unique=True)
@@ -130,7 +117,6 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    """Order entity - customer orders demonstrating M2M and enum fields."""
 
     id = fields.IntField(pk=True)
     order_number = fields.CharField(max_length=50, unique=True)
@@ -153,7 +139,6 @@ class Order(models.Model):
 
 
 class EmployeeProfile(models.Model):
-    """Employee profile - demonstrates OneToOneField."""
 
     id = fields.IntField(pk=True)
     employee: fields.OneToOneRelation[Employee] = fields.OneToOneField(
@@ -168,7 +153,6 @@ class EmployeeProfile(models.Model):
 
 
 class Warehouse(models.Model):
-    """Warehouse entity - storage location for inventory."""
 
     id = fields.IntField(pk=True)
     name = fields.CharField(max_length=200)
@@ -180,12 +164,6 @@ class Warehouse(models.Model):
 
 
 class Alert(models.Model):
-    """Inventory alert - references Warehouse via FK.
-
-    'Alert' < 'Warehouse' alphabetically, so the autodetector will generate
-    CreateModel(Alert) before CreateModel(Warehouse), exercising the fix for
-    LookupError in CreateModel.state_forward with forward FK references.
-    """
 
     id = fields.IntField(pk=True)
     warehouse: fields.ForeignKeyRelation[Warehouse] = fields.ForeignKeyField(

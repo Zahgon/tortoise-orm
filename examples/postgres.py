@@ -1,6 +1,3 @@
-"""
-This example showcases postgres features
-"""
 
 from tortoise import Tortoise, fields, run_async
 from tortoise.models import Model

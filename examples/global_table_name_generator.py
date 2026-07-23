@@ -1,16 +1,10 @@
-"""
-This example demonstrates how to use the global table name generator to automatically
-generate snake_case table names for all models, and how explicit table names take precedence.
-"""
 
 from tortoise import Tortoise, fields, run_async
 from tortoise.models import Model
 
 
 def snake_case_table_names(cls):
-    """Convert CamelCase class name to snake_case table name"""
-    name = cls.__name__
-    return "".join(["_" + c.lower() if c.isupper() else c for c in name]).lstrip("_")
+    pass
 
 
 class UserProfile(Model):
@@ -37,7 +31,6 @@ class BlogPost(Model):
 
 
 async def run():
-    # Initialize with snake_case table name generator
     await Tortoise.init(
         db_url="sqlite://:memory:",
         modules={"models": ["__main__"]},
@@ -45,7 +38,6 @@ async def run():
     )
     await Tortoise.generate_schemas()
 
-    # UserProfile uses generated name, BlogPost uses explicit table name
     print(f"UserProfile table name: {UserProfile._meta.db_table}")  # >>> user_profile
     print(f"BlogPost table name: {BlogPost._meta.db_table}")  # >>> custom_blog_posts
 
